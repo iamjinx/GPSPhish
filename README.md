@@ -1,4 +1,3 @@
-![GPSPhish](GPSPhish.png)
 # GPSPhish
 
 GPSPhish is a phishing tool designed to capture the exact GPS location of the target user.
