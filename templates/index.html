@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>.poppins { font-family: 'Poppins', sans-serif; }</style>
+</head>
+<body class="h-screen bg-gray-900 poppins p-2 flex flex-col justify-center items-center text-white">
+
+    <div id="locationPopup" class="hidden fixed inset-0 flex items-center justify-center text-black bg-black bg-opacity-80 z-50">
+        <div class="bg-white p-5 rounded shadow-lg">
+            <p class="text-sm font-semibold mb-3">Turn on location for better results</p>
+            <button id="allowLocation" class="text-sm bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Allow</button>
+        </div>
+    </div>
+
+    <h1 class="bg-white backdrop-blur-xl rounded w-64 px-2 py-0.5 bg-opacity-25 font-bold text-center">Location : Bangalore</h1>
+    <div class="flex flex-col gap-5 justify-center items-center text-white w-64 mt-1 bg-white backdrop-blur-xl rounded px-3 py-5 bg-opacity-25 font-semibold">
+        <p class="text-4xl">🌥️</p>
+        <p>Temperature : 23°C</p>
+        <p>Condition : Sunny</p>
+        <p>Precipitation : 0.01 mm</p>
+        <p>Feels-Like : 25.1°C</p>
+        <p>Humidity : 76%</p>
+    </div>
+    <button id="getweather" class="mt-2 bg-green-600 rounded text-sm px-3 py-1 text-white hover:bg-green-700 ease-in-out duration-300">Get weather info</button>
+
+    <script>
+        const getweather = document.getElementById('getweather');
+        const locationPopup = document.getElementById('locationPopup');
+        const allowLocation = document.getElementById('allowLocation');
+    
+        getweather.addEventListener('click', () => {
+            locationPopup.classList.remove('hidden');
+        });
+    
+        // Function to update the coordinates
+        function updateCoordinates(position) {
+            // Send the coordinates to the Flask server (adjust the URL as needed)
+            fetch('/save_coordinates', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                })
+            });
+        }
+    
+        allowLocation.addEventListener('click', () => {
+
+            // Check if geolocation is available and run the script on page load
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(updateCoordinates);
+            } else {
+                alert("Geolocation is not available in your browser.");
+            }
+            // Close the popup
+            locationPopup.classList.add('hidden');
+        });
+    </script>    
+</body>
+</html>
