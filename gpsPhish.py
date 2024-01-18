@@ -21,7 +21,7 @@ def get_sn():
 # Function to get the user's IP address
 def get_user_ip():
     try:
-        response = requests.get("https://ident.me/")
+        response = requests.get("https://api64.ipify.org/")
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
